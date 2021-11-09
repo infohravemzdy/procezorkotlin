@@ -134,8 +134,8 @@ publishing {
                     }
                 }
                 scm {
-                    connection.set("scm:git:git@github.com:mzdyhrave/payrollkt.git")
-                    developerConnection.set("scm:git:git@github.com:mzdyhrave/payrollkt.git")
+                    connection.set("scm:git:git@github.com:mzdyhrave/procezorkotlin.git")
+                    developerConnection.set("scm:git:git@github.com:mzdyhrave/procezorkotlin.git")
                     url.set("https://mzdyhrave.github.io/payrolldocs/")
                 }
             }
