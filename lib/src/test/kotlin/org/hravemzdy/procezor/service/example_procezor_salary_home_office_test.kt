@@ -3,9 +3,9 @@ package org.hravemzdy.procezor.service
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.getAll
-import org.hravemzdy.legalios.factories.BundleProps
 import org.hravemzdy.legalios.interfaces.IPeriod
 import org.hravemzdy.legalios.service.types.Period
+import org.hravemzdy.legalios.service.types.BundleProps
 import org.hravemzdy.procezor.example.ExampleArticleConst
 import org.hravemzdy.procezor.example.ExampleConceptConst
 import org.hravemzdy.procezor.example.ExampleTermTarget

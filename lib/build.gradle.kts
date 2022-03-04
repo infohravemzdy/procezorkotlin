@@ -57,7 +57,7 @@ dependencies {
     api("org.reflections:reflections:0.9.12")
 
     // legalios library
-    api("org.hravemzdy.legalios:kotlin-legalios:0.0.8")
+    api("org.hravemzdy.legalios:kotlin-legalios:0.22.2")
 
     implementation("com.michael-bull.kotlin-result:kotlin-result:1.1.12")
 
