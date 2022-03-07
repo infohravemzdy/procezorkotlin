@@ -12,7 +12,6 @@ open class ExampleConceptSpec(concept: ConceptCode, path: Iterable<ArticleCode>,
     }
 }
 
-
 open class ExampleTermTarget(_month: MonthCode, _contract: ContractCode, _position: PositionCode,
     _variant: VariantCode, _article: ArticleCode, _concept: ConceptCode)
     : TermTarget(_month, _contract, _position, _variant, _article, _concept) {

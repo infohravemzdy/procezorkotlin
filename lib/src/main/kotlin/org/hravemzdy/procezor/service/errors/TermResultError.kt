@@ -62,10 +62,10 @@ sealed class TermResultError : ITermResultError {
         TermResultError(period, target, "invalid result type $typeDesr error!")
 
     class InvalidRulesetError(period: IPeriod, target: ITermTarget?, typeDesr: String) :
-        TermResultError(period, target, "Invalid $typeDesr Ruleset error!")
+        TermResultError(period, target, "invalid $typeDesr Ruleset error!")
 
     class InvalidTargetError(period: IPeriod, target: ITermTarget?, typeDesr: String) :
-        TermResultError(period, target, "Invalid target type $typeDesr error!")
+        TermResultError(period, target, "invalid target type $typeDesr error!")
 
     class NoResultFoundError(
         period: IPeriod,
@@ -73,7 +73,7 @@ sealed class TermResultError : ITermResultError {
         article: String,
         contract: ContractCode? = null,
         position: PositionCode? = null
-    ) : TermResultError(period, target, "Result for ${article}${messageContractPosition(contract, position)} Not Found")
+    ) : TermResultError(period, target, "result for ${article}${messageContractPosition(contract, position)} Not Found")
 
     class NullResultFoundError(
         period: IPeriod,
@@ -81,7 +81,7 @@ sealed class TermResultError : ITermResultError {
         article: String,
         contract: ContractCode? = null,
         position: PositionCode? = null
-    ) : TermResultError(period, target, "Result found for ${article}${messageContractPosition(contract, position)} but Instance is Null!")
+    ) : TermResultError(period, target, "result found for ${article}${messageContractPosition(contract, position)} but Instance is Null!")
 
     companion object {
         fun messageContractPosition(contract: ContractCode?, position: PositionCode?): String {

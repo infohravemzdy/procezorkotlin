@@ -14,3 +14,5 @@ interface ITermCalcul : ITermSymbol {
     val resultDelegate: ResultFunc?
     fun getResults(period: IPeriod, ruleset: IBundleProps, results: BuilderResultList): BuilderResultList
 }
+
+typealias ITermCalculList = Iterable<ITermCalcul>
