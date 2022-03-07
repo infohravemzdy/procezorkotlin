@@ -27,24 +27,71 @@ sealed class TermResultError : ITermResultError {
         this.concept = target?.concept ?: ConceptCode.new()
         this.variant = target?.variant ?: VariantCode.new()
     }
+
     override fun description(): String {
         return message
     }
+
     override fun article(): ArticleCode {
         return target?.article ?: ArticleCode.new()
     }
+
     override fun concept(): ConceptCode {
         return target?.concept ?: ConceptCode.new()
     }
+
     override fun articleDescr(): String {
         return target?.articleDescr() ?: "ArticleCode for ${article.value}"
     }
+
     override fun conceptDescr(): String {
         return target?.conceptDescr() ?: "ConceptCode for ${concept.value}"
     }
 
     class EvalResultError(period: IPeriod, target: ITermTarget?) : TermResultError(period, target, "evaluation failed")
-    class ExtractResultError(period: IPeriod, target: ITermTarget?) : TermResultError(period, target, "extract result failed")
-    class NoImplementationError(period: IPeriod, target: ITermTarget?) : TermResultError(period, target, "failed with no-implementation")
-    class NoResultFuncError(period: IPeriod, target: ITermTarget?) : TermResultError(period, target, "failed with no-result function")
+    class ExtractResultError(period: IPeriod, target: ITermTarget?) :
+        TermResultError(period, target, "extract result failed")
+
+    class NoImplementationError(period: IPeriod, target: ITermTarget?) :
+        TermResultError(period, target, "failed with no-implementation")
+
+    class NoResultFuncError(period: IPeriod, target: ITermTarget?) :
+        TermResultError(period, target, "failed with no-result function")
+
+    class InvalidResultError(period: IPeriod, target: ITermTarget?, typeDesr: String) :
+        TermResultError(period, target, "invalid result type $typeDesr error!")
+
+    class InvalidRulesetError(period: IPeriod, target: ITermTarget?, typeDesr: String) :
+        TermResultError(period, target, "Invalid $typeDesr Ruleset error!")
+
+    class InvalidTargetError(period: IPeriod, target: ITermTarget?, typeDesr: String) :
+        TermResultError(period, target, "Invalid target type $typeDesr error!")
+
+    class NoResultFoundError(
+        period: IPeriod,
+        target: ITermTarget?,
+        article: String,
+        contract: ContractCode? = null,
+        position: PositionCode? = null
+    ) : TermResultError(period, target, "Result for ${article}${messageContractPosition(contract, position)} Not Found")
+
+    class NullResultFoundError(
+        period: IPeriod,
+        target: ITermTarget?,
+        article: String,
+        contract: ContractCode? = null,
+        position: PositionCode? = null
+    ) : TermResultError(period, target, "Result found for ${article}${messageContractPosition(contract, position)} but Instance is Null!")
+
+    companion object {
+        fun messageContractPosition(contract: ContractCode?, position: PositionCode?): String {
+            return if (contract != null && position != null) {
+                ", contract=${contract.value}, position=${position.value}"
+            } else if (contract != null) {
+                ", contract=${contract.value}"
+            } else {
+                ""
+            }
+        }
+    }
 }

@@ -1,11 +1,9 @@
 package org.hravemzdy.procezor.registry.providers
 
+import org.hravemzdy.legalios.interfaces.IBundleProps
 import org.hravemzdy.legalios.interfaces.IPeriod
-import org.hravemzdy.procezor.interfaces.IConceptSpec
-import org.hravemzdy.procezor.interfaces.ResultFunc
-import org.hravemzdy.procezor.service.types.ArticleCode
-import org.hravemzdy.procezor.service.types.ConceptCode
-import org.hravemzdy.procezor.service.types.MonthCode
+import org.hravemzdy.procezor.interfaces.*
+import org.hravemzdy.procezor.service.types.*
 
 abstract class ConceptSpec(override val code: ConceptCode, override val path: Iterable<ArticleCode>,
                            override val resultDelegate: ResultFunc?) : IConceptSpec, Comparable<ConceptSpec> {
@@ -32,12 +30,25 @@ abstract class ConceptSpec(override val code: ConceptCode, override val path: It
     }
 
     override fun hashCode(): Int {
-        var result = code.hashCode()
+        val result = code.hashCode()
         return result
     }
+    override fun defaultTargetList(article: ArticleCode, period: IPeriod, ruleset: IBundleProps, month: MonthCode,
+                                   contractTerms: Iterable<IContractTerm>, positionTerms: Iterable<IPositionTerm>,
+                                   targets: ITermTargetList, vars: VariantCode) : ITermTargetList {
+        val con = ContractCode.zero()
+        val pos = PositionCode.zero()
+
+        if (targets.count()!=0) {
+            return listOf<ITermTarget>()
+        }
+        return listOf<ITermTarget>(TermTarget(month, con, pos, vars, article, code))
+    }
+
     companion object {
         fun constToPathArray(path: Iterable<Int>): Iterable<ArticleCode> {
             return path.map { x -> ArticleCode.get(x) }
         }
     }
 }
+

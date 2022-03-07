@@ -8,6 +8,7 @@ import org.hravemzdy.procezor.registry.providers.ArticleSpec
 import org.hravemzdy.procezor.registry.providers.ArticleSpecProvider
 import org.hravemzdy.procezor.registry.providers.IArticleSpecProvider
 import org.hravemzdy.procezor.service.types.ArticleCode
+import org.hravemzdy.procezor.service.types.ArticleSeqs
 import org.hravemzdy.procezor.service.types.ConceptCode
 import org.hravemzdy.procezor.service.types.VersionCode
 
@@ -15,11 +16,11 @@ import org.hravemzdy.procezor.service.types.VersionCode
 interface IArticleSpecFactory : ISpecFactory<IArticleSpecProvider, IArticleSpec, ArticleCode> {
 }
 
-class ProviderRecord(val article: Int, val concept: Int, val sums: Iterable<Int>)
+class ProviderRecord(val article: Int, val sequens: Int, val concept: Int, val sums: Iterable<Int>)
 
 class NotFoundArticleSpec : ArticleSpec {
 
-    constructor(_code: ArticleCode) : super(_code, ConceptCode.get(CONCEPT_CODE.code), emptyList<ArticleCode>())
+    constructor(_code: ArticleCode) : super(_code, ArticleSeqs.zero(), ConceptCode.get(CONCEPT_CODE.code), emptyList<ArticleCode>())
 
     companion object {
         val CONCEPT_CODE = ConceptConst.CONCEPT_NOTFOUND
@@ -44,7 +45,7 @@ abstract class ArticleSpecFactory() : SpecFactory<IArticleSpecProvider, IArticle
 
     companion object {
         fun buildProvidersFromRecords(records: Iterable<ProviderRecord>): Map<CODE, IArticleSpecProvider> {
-            var providers: Map<CODE, IArticleSpecProvider> = records.map { x -> ArticleProviderConfig(x.article, x.concept, x.sums) }
+            var providers: Map<CODE, IArticleSpecProvider> = records.map { x -> ArticleProviderConfig(x.article, x.sequens, x.concept, x.sums) }
                 .associateBy { k -> k.code.value }
 
             return providers

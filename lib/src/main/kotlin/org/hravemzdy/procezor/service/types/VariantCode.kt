@@ -4,6 +4,7 @@ import org.hravemzdy.procezor.interfaces.ICodeValue
 
 data class VariantCode(override val value: Int) : ICodeValue<Int>, Comparable<VariantCode>  {
     companion object {
+        fun zero(): VariantCode {return new() }
         fun new(): VariantCode {return VariantCode(0) }
         fun get(value: Int): VariantCode {return VariantCode(value) }
     }

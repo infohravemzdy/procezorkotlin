@@ -5,6 +5,7 @@ import org.hravemzdy.procezor.interfaces.ICodeValue
 
 data class MonthCode(override val value: Int) : ICodeValue<Int>, Comparable<MonthCode>  {
     companion object {
+        fun zero(): MonthCode {return new() }
         fun new(): MonthCode {return MonthCode(0) }
         fun get(value: Int): MonthCode {return MonthCode(value) }
         fun getWithPeriod(period: IPeriod): MonthCode {return MonthCode(period.code) }

@@ -4,6 +4,7 @@ import org.hravemzdy.procezor.interfaces.ISpecCode
 
 data class ConceptCode(override val value: Int) : ISpecCode, Comparable<ConceptCode>  {
     companion object {
+        fun zero(): ConceptCode {return new() }
         fun new(): ConceptCode {return ConceptCode(0) }
         fun get(value: Int): ConceptCode {return ConceptCode(value) }
     }

@@ -11,13 +11,14 @@ import org.hravemzdy.procezor.example.ExampleConceptConst
 import org.hravemzdy.procezor.example.ExampleTermTarget
 import org.hravemzdy.procezor.example.ServiceExample
 import org.hravemzdy.procezor.interfaces.ITermTarget
+import org.hravemzdy.procezor.interfaces.ITermTargetList
 import org.hravemzdy.procezor.service.types.*
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import kotlin.test.*
 
 class ServiceProcezorExampleWithSalaryHomeOfficeTest : Spek({
-    fun getTargetsFromDb(period: IPeriod): Iterable<ITermTarget> {
+    fun getTargetsFromDb(period: IPeriod): ITermTargetList {
         val  CONTRACT_CODE = 0
         val  POSITION_CODE = 0
 
@@ -58,14 +59,14 @@ class ServiceProcezorExampleWithSalaryHomeOfficeTest : Spek({
         val factoryArticle = testService.getArticleSpec(factoryArticleCode, testPeriod, testVersion)
         it("article should have value = ${ExampleArticleConst.ARTICLE_TIMESHT_WORKING.code}") {
             assertNotNull(factoryArticle, "Error getting article - article is not valid")
-            assertNotEquals(0, factoryArticle?.code.value, "Error getting article - article is not valid")
+            assertNotEquals(0, factoryArticle.code.value, "Error getting article - article is not valid")
         }
         val factoryConceptCode = ConceptCode.get(ExampleConceptConst.CONCEPT_TIMESHT_WORKING.code)
 
         val factoryConcept = testService.getConceptSpec(factoryConceptCode, testPeriod, testVersion)
         it("concept should have value = ${ExampleConceptConst.CONCEPT_TIMESHT_WORKING.code}") {
             assertNotNull(factoryConcept, "Error getting concept - concept is not valid")
-            assertNotEquals(0, factoryConcept?.code.value, "Error getting concept - concept is not valid")
+            assertNotEquals(0, factoryConcept.code.value, "Error getting concept - concept is not valid")
         }
         val initService = testService.initWithPeriod(testPeriod)
         it("initiating service should return true") {

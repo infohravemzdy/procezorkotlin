@@ -4,6 +4,7 @@ import org.hravemzdy.procezor.interfaces.ICodeValue
 
 data class PositionCode(override val value: Int) : ICodeValue<Int>, Comparable<PositionCode>  {
     companion object {
+        fun zero(): PositionCode {return new() }
         fun new(): PositionCode {return PositionCode(0) }
         fun get(value: Int): PositionCode {return PositionCode(value) }
     }

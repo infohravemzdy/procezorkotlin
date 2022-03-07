@@ -1,5 +1,6 @@
 package org.hravemzdy.procezor.service.types
 
+import org.hravemzdy.procezor.interfaces.IArticleSpec
 import org.hravemzdy.procezor.interfaces.ITermResult
 import org.hravemzdy.procezor.interfaces.ITermTarget
 
@@ -8,16 +9,13 @@ open class TermResult : TermSymbol, ITermResult {
         protected set
     override var concept: ConceptCode = ConceptCode.new()
         protected set
-    override var resultValue: Int = 0
-        protected set
-    override var resultBasis: Int = 0
-        protected set
-    override var resultDescr: String = ""
+    override var spec: IArticleSpec? = null
         protected set
 
 
-    constructor(_target: ITermTarget?, _value: Int, _basis: Int, _descr: String) : super() {
+    constructor(_target: ITermTarget?, _spec: IArticleSpec?) : super() {
         this.target = _target
+        this.spec = _spec
 
         if (this.target != null) {
             this.monthCode = target!!.monthCode
@@ -27,10 +25,6 @@ open class TermResult : TermSymbol, ITermResult {
             this.article = target!!.article
             this.concept = target!!.concept
         }
-
-        this.resultValue = _value
-        this.resultBasis = _basis
-        this.resultDescr = _descr
     }
 
     override fun conceptDescr(): String {

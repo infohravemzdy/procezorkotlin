@@ -1,78 +1,38 @@
 package org.hravemzdy.procezor.example
 
+import org.hravemzdy.procezor.interfaces.IArticleSpec
 import org.hravemzdy.procezor.interfaces.ITermTarget
 
-class ExampleResultConst {
-    companion object {
-        val VALUE_ZERO: Int = 0
-        val BASIS_ZERO: Int = 0
-        val DESCRIPTION_EMPTY: String = "result from input value"
-    }
+class TimeshtWorkingResult(target: ITermTarget, spec: IArticleSpec?) : ExampleTermResult(target, spec) {
 }
 
-class TimeshtWorkingResult : ExampleTermResult {
-    constructor(target: ITermTarget, value: Int, basis: Int, descr: String) : super(target, basis, value, descr)
-
-    constructor(target: ITermTarget) : this(target, ExampleResultConst.VALUE_ZERO, ExampleResultConst.BASIS_ZERO, ExampleResultConst.DESCRIPTION_EMPTY)
+class AmountBasisResult(target: ITermTarget, spec: IArticleSpec?) : ExampleTermResult(target, spec) {
 }
 
-class AmountBasisResult : ExampleTermResult {
-    constructor(target: ITermTarget, value: Int, basis: Int, descr: String) : super(target, basis, value, descr)
-
-    constructor(target: ITermTarget) : this(target, ExampleResultConst.VALUE_ZERO, ExampleResultConst.BASIS_ZERO, ExampleResultConst.DESCRIPTION_EMPTY)
+class AmountFixedResult(target: ITermTarget, spec: IArticleSpec?) : ExampleTermResult(target, spec) {
 }
 
-class AmountFixedResult : ExampleTermResult {
-    constructor(target: ITermTarget, value: Int, basis: Int, descr: String) : super(target, basis, value, descr)
-
-    constructor(target: ITermTarget) : this(target, ExampleResultConst.VALUE_ZERO, ExampleResultConst.BASIS_ZERO, ExampleResultConst.DESCRIPTION_EMPTY)
+class HealthInsbaseResult(target: ITermTarget, spec: IArticleSpec?) : ExampleTermResult(target, spec) {
 }
 
-class HealthInsbaseResult : ExampleTermResult {
-    constructor(target: ITermTarget, value: Int, basis: Int, descr: String) : super(target, basis, value, descr)
-
-    constructor(target: ITermTarget) : this(target, ExampleResultConst.VALUE_ZERO, ExampleResultConst.BASIS_ZERO, ExampleResultConst.DESCRIPTION_EMPTY)
+class SocialInsbaseResult(target: ITermTarget, spec: IArticleSpec?) : ExampleTermResult(target, spec) {
 }
 
-class SocialInsbaseResult : ExampleTermResult {
-    constructor(target: ITermTarget, value: Int, basis: Int, descr: String) : super(target, basis, value, descr)
-
-    constructor(target: ITermTarget) : this(target, ExampleResultConst.VALUE_ZERO, ExampleResultConst.BASIS_ZERO, ExampleResultConst.DESCRIPTION_EMPTY)
+class HealthInspaymResult(target: ITermTarget, spec: IArticleSpec?) : ExampleTermResult(target, spec) {
 }
 
-class HealthInspaymResult : ExampleTermResult {
-    constructor(target: ITermTarget, value: Int, basis: Int, descr: String) : super(target, basis, value, descr)
-
-    constructor(target: ITermTarget) : this(target, ExampleResultConst.VALUE_ZERO, ExampleResultConst.BASIS_ZERO, ExampleResultConst.DESCRIPTION_EMPTY)
+class SocialInspaymResult(target: ITermTarget, spec: IArticleSpec?) : ExampleTermResult(target, spec) {
 }
 
-class SocialInspaymResult : ExampleTermResult {
-    constructor(target: ITermTarget, value: Int, basis: Int, descr: String) : super(target, basis, value, descr)
-
-    constructor(target: ITermTarget) : this(target, ExampleResultConst.VALUE_ZERO, ExampleResultConst.BASIS_ZERO, ExampleResultConst.DESCRIPTION_EMPTY)
+class TaxingAdvbaseResult(target: ITermTarget, spec: IArticleSpec?) : ExampleTermResult(target, spec) {
 }
 
-class TaxingAdvbaseResult : ExampleTermResult {
-    constructor(target: ITermTarget, value: Int, basis: Int, descr: String) : super(target, basis, value, descr)
-
-    constructor(target: ITermTarget) : this(target, ExampleResultConst.VALUE_ZERO, ExampleResultConst.BASIS_ZERO, ExampleResultConst.DESCRIPTION_EMPTY)
+class TaxingAdvpaymResult(target: ITermTarget, spec: IArticleSpec?) : ExampleTermResult(target, spec) {
 }
 
-class TaxingAdvpaymResult : ExampleTermResult {
-    constructor(target: ITermTarget, value: Int, basis: Int, descr: String) : super(target, basis, value, descr)
-
-    constructor(target: ITermTarget) : this(target, ExampleResultConst.VALUE_ZERO, ExampleResultConst.BASIS_ZERO, ExampleResultConst.DESCRIPTION_EMPTY)
+class IncomeGrossResult(target: ITermTarget, spec: IArticleSpec?) : ExampleTermResult(target, spec) {
 }
 
-class IncomeGrossResult : ExampleTermResult {
-    constructor(target: ITermTarget, value: Int, basis: Int, descr: String) : super(target, basis, value, descr)
-
-    constructor(target: ITermTarget) : this(target, ExampleResultConst.VALUE_ZERO, ExampleResultConst.BASIS_ZERO, ExampleResultConst.DESCRIPTION_EMPTY)
-}
-
-class IncomeNettoResult : ExampleTermResult {
-    constructor(target: ITermTarget, value: Int, basis: Int, descr: String) : super(target, basis, value, descr)
-
-    constructor(target: ITermTarget) : this(target, ExampleResultConst.VALUE_ZERO, ExampleResultConst.BASIS_ZERO, ExampleResultConst.DESCRIPTION_EMPTY)
+class IncomeNettoResult(target: ITermTarget, spec: IArticleSpec?) : ExampleTermResult(target, spec) {
 }
 

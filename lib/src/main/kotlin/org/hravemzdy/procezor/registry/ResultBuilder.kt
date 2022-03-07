@@ -16,9 +16,9 @@ class ResultBuilder : IResultBuilder {
     override var periodInit: IPeriod = Period.new()
         private set
 
-    override var articleOrder: Iterable<ArticleCode> = arrayListOf()
+    override var articleOrder: Iterable<ArticleTerm> = arrayListOf()
         private set
-    override var articlePaths: Map<ArticleCode, Iterable<IArticleDefine>> = mapOf()
+    override var articlePaths: Map<ArticleTerm, Iterable<IArticleDefine>> = mapOf()
         private set
 
     private var articleModel: Iterable<IArticleSpec> = listOf()
@@ -47,8 +47,11 @@ class ResultBuilder : IResultBuilder {
         return true
     }
 
-    override fun getResults(ruleset: IBundleProps, targets: Iterable<ITermTarget>, finDefs: IArticleDefine): BuilderResultList {
-        val calculTargets = buildCalculsList(periodInit, targets, finDefs)
+    override fun getResults(ruleset: IBundleProps,
+                            contractTerms: Iterable<IContractTerm>, positionTerms: Iterable<IPositionTerm>,
+                            targets: ITermTargetList, calcArticles: Iterable<ArticleCode>): BuilderResultList {
+        val calculTargets = buildCalculsList(periodInit, ruleset,
+        contractTerms, positionTerms, targets, calcArticles)
 
         val calculResults = buildResultsList(periodInit, ruleset, calculTargets)
 
@@ -56,15 +59,21 @@ class ResultBuilder : IResultBuilder {
     }
 
     private fun buildCalculsList(
-        period: IPeriod,
-        targets: Iterable<ITermTarget>,
-        finDefs: IArticleDefine
+        period: IPeriod, ruleset: IBundleProps,
+        contractTerms: Iterable<IContractTerm>, positionTerms: Iterable<IPositionTerm>,
+        targets: ITermTargetList,
+        calcArticles: Iterable<ArticleCode>
     ): Iterable<ITermCalcul> {
-        val finDefine: IArticleDefine = ArticleDefine(finDefs)
+        val specDefines: Iterable<IArticleSpec?> = calcArticles.map { a -> articleModel.firstOrNull { m -> m.code == a } }
 
-        val targetsSpec: Iterable<ITermTarget> = addFinDefToTargets(period, targets.toList(), finDefine)
+        val calcDefines = specDefines.filter { s -> (s != null) }.map { t -> t!! }
+            .map { x -> ArticleDefine(x.code.value, x.seqs.value, x.role.value) }
 
-        val targetsStep: Iterable<ITermTarget> = addExternToTargets(period, targetsSpec)
+        val targetsSpec: ITermTargetList = addFinDefToTargets(period, ruleset,
+            contractTerms, positionTerms, targets.toList(), calcDefines)
+
+        val targetsStep: ITermTargetList = addExternToTargets(period, ruleset,
+            contractTerms, positionTerms, targetsSpec)
 
         val calculsList: Iterable<ITermCalcul> = addTargetToCalculs(targetsStep)
 
@@ -78,77 +87,117 @@ class ResultBuilder : IResultBuilder {
     private fun mergeResults(results: BuilderResultList, vararg resultValues: BuilderResult): BuilderResultList {
         return results.plus(resultValues)
     }
-    private fun addFinDefToTargets(period: IPeriod, targets: Iterable<ITermTarget>, finDefs: IArticleDefine): Iterable<ITermTarget> {
-        return mergeItemPendings(period, targets, finDefs)
+    private fun addFinDefToTargets(period: IPeriod, ruleset: IBundleProps,
+                                   contractTerms: Iterable<IContractTerm>, positionTerms: Iterable<IPositionTerm>,
+                                   targets: ITermTargetList, calcDefines: Iterable<IArticleDefine>): ITermTargetList {
+        return mergeListPendings(period, ruleset, contractTerms, positionTerms, targets, calcDefines)
     }
-    private fun addExternToTargets(period: IPeriod, targets: Iterable<ITermTarget>): Iterable<ITermTarget> {
-        var targetsInit: Iterable<ITermTarget> = targets.toList()
+    private fun addExternToTargets(period: IPeriod, ruleset: IBundleProps,
+                                   contractTerms: Iterable<IContractTerm>, positionTerms: Iterable<IPositionTerm>,
+                                   targets: ITermTargetList): ITermTargetList {
+        var targetsInit: ITermTargetList = targets.toList()
 
-        var targetList = targets.fold(targetsInit) {agr, item -> mergePendings(period, agr, item)}.toList()
+        var targetList = targets.fold(targetsInit) {agr, item ->
+            mergePendings(period, ruleset, contractTerms, positionTerms, agr, item)}.toList()
 
         var targetSort = targetList.sortedWith(TargetComparator(articleOrder.toList())).toList()
 
         return targetSort
     }
 
-    private fun addTargetToCalculs(targets: Iterable<ITermTarget>): Iterable<ITermCalcul> {
-        val targetsRets = targets.map {TermCalcul(it, getCalculFunc(conceptModel, it.concept)) }
+    private fun addDefinesToTargets(period: IPeriod, ruleset: IBundleProps,
+                                    contractTerms: Iterable<IContractTerm>, positionTerms: Iterable<IPositionTerm>,
+                                    targets: ITermTargetList, defines: Iterable<IArticleDefine>) : ITermTargetList {
+        return defines.flatMap { x ->
+                getTargetList(period, ruleset, conceptModel, contractTerms, positionTerms,
+                    targets.filter {t -> t.article == x.code}, x.code, x.role).map { it }
+        }
+    }
+    private fun addTargetToCalculs(targets: ITermTargetList): Iterable<ITermCalcul> {
+        val targetsRets = targets.map {
+            val articleSpec = articleModel.first { a -> (a.code == it.article) }
+            TermCalcul(it, articleSpec, getCalculFunc(conceptModel, it.concept)) }
         return targetsRets.toList()
     }
-    private fun mergePendings(period: IPeriod, init: Iterable<ITermTarget>, target: ITermTarget): Iterable<ITermTarget> {
-        var resultList: Iterable<ITermTarget> = init.toList()
+    private fun mergePendings(period: IPeriod, ruleset: IBundleProps,
+                              contractTerms: Iterable<IContractTerm>, positionTerms: Iterable<IPositionTerm>,
+                              init: ITermTargetList, target: ITermTarget): ITermTargetList {
+        var resultList: ITermTargetList = init.toList()
 
-        val pendingsSpec = articlePaths.firstNotNullOfOrNull { x -> x.takeIf { p -> (p.key == target.article) } }
+        val pendingsSpec = articlePaths.firstNotNullOfOrNull { x -> x.takeIf { p -> (p.key.code == target.article) } }
         val pendingsPath = pendingsSpec?.value
 
         if (pendingsPath != null)
         {
-            resultList = pendingsPath.fold(resultList) {agr, def -> mergeItemPendings(period, agr, def).toList()}
+            resultList = pendingsPath.fold(resultList) {agr, def -> mergeItemPendings(
+                period, ruleset, contractTerms, positionTerms, agr, def).toList()}
         }
         return resultList
     }
-    private fun mergeItemPendings(period: IPeriod, init: Iterable<ITermTarget>, articleDefs: IArticleDefine): Iterable<ITermTarget> {
-        val monthCode = MonthCode.get(period.code)
+    private fun mergeItemPendings(period: IPeriod, ruleset: IBundleProps,
+                                  contractTerms: Iterable<IContractTerm>, positionTerms: Iterable<IPositionTerm>,
+                                  init: ITermTargetList, articleDefs: IArticleDefine): ITermTargetList {
+        var resultList: ITermTargetList = init.toList()
 
-        val contract = ContractCode.new()
-        val position = PositionCode.new()
+        var initTargets = init.filter {x -> x.article == articleDefs.code}
 
-        var resultList: Iterable<ITermTarget> = init.toList()
+        val targetList = getTargetList(period, ruleset, conceptModel,
+            contractTerms, positionTerms, initTargets, articleDefs.code, articleDefs.role)
 
-        var initTarget = init.firstOrNull {x -> x.article == articleDefs.code}
+        resultList = resultList.plus(targetList).toList()
 
-        if (initTarget == null)
-        {
-            val variant = VariantCode.get(1)
+        return resultList
+    }
+    private fun mergeListPendings(period: IPeriod, ruleset: IBundleProps,
+                                  contractTerms: Iterable<IContractTerm>, positionTerms: Iterable<IPositionTerm>,
+                                  targets: ITermTargetList, calcDefines: Iterable<IArticleDefine>): ITermTargetList {
+        var resultList: ITermTargetList = targets.toList()
 
-            val resultItem = TermTarget(monthCode, contract, position, variant, articleDefs.code, articleDefs.role)
+        val defineList = calcDefines.filter {x -> targets.firstOrNull { t -> t.article == x.code} == null }
 
-            resultList = resultList.plus(resultItem).toList()
-        }
+        val targetList = addDefinesToTargets(period, ruleset, contractTerms, positionTerms, targets, defineList)
+
+        resultList = resultList.plus(targetList).toList()
 
         return resultList
     }
     private fun getCalculFunc(conceptsModel: Iterable<IConceptSpec>, concept: ConceptCode): ResultFunc? {
         var conceptSpec = conceptsModel.firstOrNull { a -> (a.code == concept) }
 
-        if (conceptSpec == null)
-        {
-            return fun(target: ITermTarget, period: IPeriod, ruleset: IBundleProps, results: BuilderResultList): BuilderResultList {
-                return notFoundCalculFunc(target, period, ruleset, results)
+        if (conceptSpec == null) {
+            return fun(target: ITermTarget, spec: IArticleSpec?, period: IPeriod, ruleset: IBundleProps, results: BuilderResultList): BuilderResultList {
+                return notFoundCalculFunc(target, spec, period, ruleset, results)
             }
         }
         return conceptSpec.resultDelegate
     }
-    private fun notFoundCalculFunc(target: ITermTarget, period: IPeriod, ruleset: IBundleProps, results: BuilderResultList): BuilderResultList
+    private fun getTargetList(period: IPeriod, ruleset: IBundleProps, conceptsModel: Iterable<IConceptSpec>,
+                              contractTerms: Iterable<IContractTerm>, positionTerms: Iterable<IPositionTerm>,
+                              targets: ITermTargetList, article: ArticleCode, concept: ConceptCode) : ITermTargetList {
+        val monthCode = MonthCode.get(period.code)
+        val variant = VariantCode.get(1)
+
+        val conceptSpec = conceptsModel.firstOrNull {a -> a.code.value == concept.value }
+        if (conceptSpec == null) {
+            val contract = ContractCode.new()
+            val position = PositionCode.new()
+            return listOf(TermTarget(monthCode, contract, position, variant, article, concept))
+        }
+        return conceptSpec.defaultTargetList(article, period, ruleset, monthCode,
+            contractTerms, positionTerms, targets, variant)
+    }
+
+    private fun notFoundCalculFunc(target: ITermTarget, spec: IArticleSpec?, period: IPeriod, ruleset: IBundleProps, results: BuilderResultList): BuilderResultList
     {
         val resultError = TermResultError.NoResultFuncError(period, target)
         return listOf(Err<ITermResultError>(resultError))
     }
-    private class TargetComparator(private val topoOrders: Iterable<ArticleCode>) : Comparator<ITermTarget> {
+    private class TargetComparator(private val topoOrders: Iterable<ArticleTerm>) : Comparator<ITermTarget> {
+        private val codeOrders: Iterable<ArticleCode> = topoOrders.map { t -> t.code }
         override fun compare(x: ITermTarget, y: ITermTarget): Int {
-            var xIndex = topoOrders.indexOf(x.article)
+            var xIndex = codeOrders.indexOf(x.article)
 
-            var yIndex = topoOrders.indexOf(y.article)
+            var yIndex = codeOrders.indexOf(y.article)
 
             if (xIndex == -1 && yIndex == -1)
             {

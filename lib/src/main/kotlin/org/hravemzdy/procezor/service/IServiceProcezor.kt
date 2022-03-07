@@ -3,14 +3,17 @@ package org.hravemzdy.procezor.service
 import org.hravemzdy.legalios.interfaces.IBundleProps
 import org.hravemzdy.legalios.interfaces.IPeriod
 import org.hravemzdy.procezor.interfaces.*
-import org.hravemzdy.procezor.service.types.ArticleCode
-import org.hravemzdy.procezor.service.types.BuilderResultList
-import org.hravemzdy.procezor.service.types.ConceptCode
-import org.hravemzdy.procezor.service.types.VersionCode
+import org.hravemzdy.procezor.service.types.*
 
 interface IServiceProcezor {
     val version: VersionCode
-    val finDefs: IArticleDefine
+    val calcArticles: Iterable<ArticleCode>
+
+    fun builderOrder() : Iterable<ArticleTerm>
+    fun builderPaths() : Map<ArticleTerm, Iterable<IArticleDefine>>
+
+    fun getContractTerms(period: IPeriod, targets: ITermTargetList) : Iterable<ContractTerm>
+    fun getPositionTerms(period: IPeriod, contracts: Iterable<ContractTerm>, targets: ITermTargetList) : Iterable<PositionTerm>
 
     fun getResults(period: IPeriod, ruleset: IBundleProps, targets: ITermTargetList): BuilderResultList
     fun initWithPeriod(period: IPeriod): Boolean
