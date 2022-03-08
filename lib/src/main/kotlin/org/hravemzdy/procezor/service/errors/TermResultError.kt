@@ -48,7 +48,8 @@ sealed class TermResultError : ITermResultError {
         return target?.conceptDescr() ?: "ConceptCode for ${concept.value}"
     }
 
-    class EvalResultError(period: IPeriod, target: ITermTarget?) : TermResultError(period, target, "evaluation failed")
+    class EvalResultError(period: IPeriod, target: ITermTarget?) :
+        TermResultError(period, target, "evaluation failed")
     class ExtractResultError(period: IPeriod, target: ITermTarget?) :
         TermResultError(period, target, "extract result failed")
 
@@ -58,30 +59,30 @@ sealed class TermResultError : ITermResultError {
     class NoResultFuncError(period: IPeriod, target: ITermTarget?) :
         TermResultError(period, target, "failed with no-result function")
 
-    class InvalidResultError(period: IPeriod, target: ITermTarget?, typeDesr: String) :
-        TermResultError(period, target, "invalid result type $typeDesr error!")
+    class InvalidResultError(period: IPeriod, target: ITermTarget?, typeDescr: String) :
+        TermResultError(period, target, "invalid result type $typeDescr error!")
 
-    class InvalidRulesetError(period: IPeriod, target: ITermTarget?, typeDesr: String) :
-        TermResultError(period, target, "invalid $typeDesr Ruleset error!")
+    class InvalidRulesetError(period: IPeriod, target: ITermTarget?, typeDescr: String) :
+        TermResultError(period, target, "invalid $typeDescr Ruleset error!")
 
-    class InvalidTargetError(period: IPeriod, target: ITermTarget?, typeDesr: String) :
-        TermResultError(period, target, "invalid target type $typeDesr error!")
+    class InvalidTargetError(period: IPeriod, target: ITermTarget?, typeDescr: String) :
+        TermResultError(period, target, "invalid target type $typeDescr error!")
 
     class NoResultFoundError(
         period: IPeriod,
         target: ITermTarget?,
-        article: String,
+        articleDescr: String,
         contract: ContractCode? = null,
         position: PositionCode? = null
-    ) : TermResultError(period, target, "result for ${article}${messageContractPosition(contract, position)} Not Found")
+    ) : TermResultError(period, target, "result for ${articleDescr}${messageContractPosition(contract, position)} Not Found")
 
     class NullResultFoundError(
         period: IPeriod,
         target: ITermTarget?,
-        article: String,
+        articleDescr: String,
         contract: ContractCode? = null,
         position: PositionCode? = null
-    ) : TermResultError(period, target, "result found for ${article}${messageContractPosition(contract, position)} but Instance is Null!")
+    ) : TermResultError(period, target, "result found for ${articleDescr}${messageContractPosition(contract, position)} but Instance is Null!")
 
     companion object {
         fun messageContractPosition(contract: ContractCode?, position: PositionCode?): String {
