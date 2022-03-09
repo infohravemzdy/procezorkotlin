@@ -1,6 +1,5 @@
 package org.hravemzdy.procezor.interfaces
 
-import org.hravemzdy.procezor.registry.providers.ArticleSpec
 import org.hravemzdy.procezor.service.types.ConceptCode
 
 interface ITermResult : ITermSymbol {
