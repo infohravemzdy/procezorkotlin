@@ -10,6 +10,8 @@ import org.hravemzdy.procezor.interfaces.ITermTarget
 import org.hravemzdy.procezor.registry.providers.ConceptSpecProvider
 import org.hravemzdy.procezor.service.types.*
 
+
+// TimeshtWorking		TIMESHT_WORKING
 class TimeshtWorkingConProv() : ConceptSpecProvider(ConceptCode.get(CONCEPT_CODE.code)) {
     override fun getSpec(period: IPeriod, version: VersionCode): IConceptSpec {
         return TimeshtWorkingConSpec(this.code)
@@ -29,6 +31,7 @@ class TimeshtWorkingConSpec(_code: ConceptCode) : ExampleConceptSpec(_code, empt
     }
 }
 
+// AmountBasis		AMOUNT_BASIS
 class AmountBasisConProv() : ConceptSpecProvider(ConceptCode.get(CONCEPT_CODE.code)) {
     override fun getSpec(period: IPeriod, version: VersionCode): IConceptSpec {
         return AmountBasisConSpec(this.code)
@@ -52,6 +55,7 @@ class AmountBasisConSpec(_code: ConceptCode) : ExampleConceptSpec(_code, constTo
     }
 }
 
+// AmountFixed		AMOUNT_FIXED
 class AmountFixedConProv() : ConceptSpecProvider(ConceptCode.get(CONCEPT_CODE.code)) {
     override fun getSpec(period: IPeriod, version: VersionCode): IConceptSpec {
         return AmountFixedConSpec(this.code)
@@ -71,6 +75,8 @@ class AmountFixedConSpec(_code: ConceptCode) : ExampleConceptSpec(_code, emptyLi
     }
 }
 
+
+// HealthInsbase		HEALTH_INSBASE
 class HealthInsbaseConProv() : ConceptSpecProvider(ConceptCode.get(CONCEPT_CODE.code)) {
     override fun getSpec(period: IPeriod, version: VersionCode): IConceptSpec {
         return HealthInsbaseConSpec(this.code)
@@ -90,6 +96,7 @@ class HealthInsbaseConSpec(_code: ConceptCode) : ExampleConceptSpec(_code, empty
     }
 }
 
+// SocialInsbase		SOCIAL_INSBASE
 class SocialInsbaseConProv() : ConceptSpecProvider(ConceptCode.get(CONCEPT_CODE.code)) {
     override fun getSpec(period: IPeriod, version: VersionCode): IConceptSpec {
         return SocialInsbaseConSpec(this.code)
@@ -109,6 +116,7 @@ class SocialInsbaseConSpec(_code: ConceptCode) : ExampleConceptSpec(_code, empty
     }
 }
 
+// HealthInspaym		HEALTH_INSPAYM
 class HealthInspaymConProv() : ConceptSpecProvider(ConceptCode.get(CONCEPT_CODE.code)) {
     override fun getSpec(period: IPeriod, version: VersionCode): IConceptSpec {
         return HealthInspaymConSpec(this.code)
@@ -132,6 +140,7 @@ class HealthInspaymConSpec(_code: ConceptCode) : ExampleConceptSpec(_code, const
     }
 }
 
+// SocialInspaym		SOCIAL_INSPAYM
 class SocialInspaymConProv() : ConceptSpecProvider(ConceptCode.get(CONCEPT_CODE.code)) {
     override fun getSpec(period: IPeriod, version: VersionCode): IConceptSpec {
         return SocialInspaymConSpec(this.code)
@@ -155,6 +164,7 @@ class SocialInspaymConSpec(_code: ConceptCode) : ExampleConceptSpec(_code, const
     }
 }
 
+// TaxingAdvbase		TAXING_ADVBASE
 class TaxingAdvbaseConProv() : ConceptSpecProvider(ConceptCode.get(CONCEPT_CODE.code)) {
     override fun getSpec(period: IPeriod, version: VersionCode): IConceptSpec {
         return TaxingAdvbaseConSpec(this.code)
@@ -174,6 +184,7 @@ class TaxingAdvbaseConSpec(_code: ConceptCode) : ExampleConceptSpec(_code, empty
     }
 }
 
+// TaxingAdvpaym		TAXING_ADVPAYM
 class TaxingAdvpaymConProv() : ConceptSpecProvider(ConceptCode.get(CONCEPT_CODE.code)) {
     override fun getSpec(period: IPeriod, version: VersionCode): IConceptSpec {
         return TaxingAdvpaymConSpec(this.code)
@@ -197,6 +208,7 @@ class TaxingAdvpaymConSpec(_code: ConceptCode) : ExampleConceptSpec(_code, const
     }
 }
 
+// IncomeGross		INCOME_GROSS
 class IncomeGrossConProv() : ConceptSpecProvider(ConceptCode.get(CONCEPT_CODE.code)) {
     override fun getSpec(period: IPeriod, version: VersionCode): IConceptSpec {
         return IncomeGrossConSpec(this.code)
@@ -216,6 +228,7 @@ class IncomeGrossConSpec(_code: ConceptCode) : ExampleConceptSpec(_code, emptyLi
     }
 }
 
+// IncomeNetto		INCOME_NETTO
 class IncomeNettoConProv() : ConceptSpecProvider(ConceptCode.get(CONCEPT_CODE.code)) {
     override fun getSpec(period: IPeriod, version: VersionCode): IConceptSpec {
         return IncomeNettoConSpec(this.code)
