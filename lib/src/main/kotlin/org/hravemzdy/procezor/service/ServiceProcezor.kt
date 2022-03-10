@@ -10,8 +10,8 @@ import org.hravemzdy.procezor.registry.factories.IConceptSpecFactory
 import org.hravemzdy.procezor.service.types.*
 
 abstract class ServiceProcezor : IServiceProcezor {
-    override val version: VersionCode
-    override val calcArticles: Iterable<ArticleCode>
+    final override val version: VersionCode
+    final override val calcArticles: Iterable<ArticleCode>
     private val builder: IResultBuilder = ResultBuilder()
     protected var articleFactory: IArticleSpecFactory? = null
     protected var conceptFactory: IConceptSpecFactory? = null
@@ -19,7 +19,6 @@ abstract class ServiceProcezor : IServiceProcezor {
     constructor(_version: VersionCode,  _calcArticles: Iterable<ArticleCode>) {
         this.version = _version
         this.calcArticles = _calcArticles.toList()
-        this.buildFactories()
     }
     override fun builderOrder() : Iterable<ArticleTerm> {
         return builder.articleOrder
@@ -70,6 +69,9 @@ abstract class ServiceProcezor : IServiceProcezor {
             initResult = builder.initWithPeriod(version, period, articleFactory!!, conceptFactory!!)
         }
 
+        if (initResult == false) {
+            println("Period: ${period.code}, init with period failed")
+        }
         return initResult
     }
     override fun buildFactories(): Boolean {
@@ -77,6 +79,9 @@ abstract class ServiceProcezor : IServiceProcezor {
 
         val conceptFactorySuccess: Boolean = buildConceptFactory()
 
+        if (!(articleFactorySuccess && conceptFactorySuccess)) {
+            println("ServiceProcezor::BuildFactories(): Version: ${version}, build factories failed")
+        }
         return articleFactorySuccess && conceptFactorySuccess
     }
     override fun getArticleSpec(code: ArticleCode, period: IPeriod, version: VersionCode): IArticleSpec? {

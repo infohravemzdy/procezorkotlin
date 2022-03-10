@@ -179,9 +179,7 @@ class ResultBuilder : IResultBuilder {
 
         val conceptSpec = conceptsModel.firstOrNull {a -> a.code.value == concept.value }
         if (conceptSpec == null) {
-            val contract = ContractCode.new()
-            val position = PositionCode.new()
-            return listOf(TermTarget(monthCode, contract, position, variant, article, concept))
+            return emptyList()
         }
         return conceptSpec.defaultTargetList(article, period, ruleset, monthCode,
             contractTerms, positionTerms, targets, variant)

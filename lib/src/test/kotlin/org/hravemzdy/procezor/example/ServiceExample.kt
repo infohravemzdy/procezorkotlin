@@ -12,7 +12,10 @@ class ServiceExample : ServiceProcezor {
         private val TEST_CALCS_ARTICLE: Iterable<ArticleCode> = listOf(ArticleCode.get(TEST_FINAL_ARTICLE.code))
     }
     constructor() : super(TEST_VERSION, TEST_CALCS_ARTICLE) {
-
+        val buildSuccess = buildFactories()
+        if (!buildSuccess) {
+            println("Version: ${version}, build factories failed")
+        }
     }
 
     override fun buildArticleFactory(): Boolean {
